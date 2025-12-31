@@ -150,8 +150,70 @@ export async function fetchFilteredInvoices(
   query: string,
   currentPage: number,
 ) {
-  // We'll implement this in later chapters
-  return [];
+  try {
+    console.log('📊 Using mock invoices data for table');
+    
+    // Mock data for invoices table
+    const mockInvoices = [
+      {
+        id: '1',
+        name: 'Disha de Oliveira',
+        email: 'disha@oliveira.com',
+        image_url: '/customers/delba-de-oliveira.png',
+        amount: 9947, // Amount in cents
+        date: '2024-01-15',
+        status: 'paid' as 'pending' | 'paid'
+      },
+      {
+        id: '2',
+        name: 'Jared Palmer',
+        email: 'jared@palmer.com',
+        image_url: '/customers/jared-palmer.png',
+        amount: 44800,
+        date: '2024-01-20',
+        status: 'pending' as 'pending' | 'paid'
+      },
+      {
+        id: '3',
+        name: 'Lee Robinson',
+        email: 'lee@robinson.com',
+        image_url: '/customers/lee-robinson.png',
+        amount: 0,
+        date: '2024-01-25',
+        status: 'paid' as 'pending' | 'paid'
+      },
+      {
+        id: '4',
+        name: 'Tom Occhino',
+        email: 'tom@occhino.com',
+        image_url: '/customers/tom-occhino.png',
+        amount: 94777,
+        date: '2024-01-30',
+        status: 'pending' as 'pending' | 'paid'
+      },
+      {
+        id: '5',
+        name: 'Emil Kowalski',
+        email: 'emil@kowalski.com',
+        image_url: '/customers/emil-kowalski.png',
+        amount: 74546,
+        date: '2024-02-01',
+        status: 'paid' as 'pending' | 'paid'
+      }
+    ];
+    
+    // Filter based on query (simple implementation)
+    const filtered = mockInvoices.filter(invoice =>
+      invoice.name.toLowerCase().includes(query.toLowerCase()) ||
+      invoice.email.toLowerCase().includes(query.toLowerCase())
+    );
+    
+    return filtered;
+    
+  } catch (error) {
+    console.error('Database Error:', error);
+    return [];
+  }
 }
 
 export async function fetchInvoicesPages(query: string) {
