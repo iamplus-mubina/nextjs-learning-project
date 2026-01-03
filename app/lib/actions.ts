@@ -103,15 +103,14 @@ export async function updateInvoice(id: string, formData: FormData) {
   redirect('/dashboard/invoices');
 }
 
-export async function deleteInvoice(id: string) {
+// ✅ FIXED: deleteInvoice function with correct return type
+export async function deleteInvoice(id: string): Promise<void> {
   try {
     console.log('Deleting invoice (Mock):', id);
     await sql.query`DELETE FROM invoices WHERE id = ${id}`;
   } catch (error) {
     console.error('Mock DB Error:', error);
-    return {
-      message: 'Database Error: Failed to Delete Invoice.',
-    };
+    throw new Error('Database Error: Failed to Delete Invoice.');
   }
 
   revalidatePath('/dashboard/invoices');

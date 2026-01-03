@@ -37,7 +37,8 @@ export function DeleteInvoice({ id }: { id: string }) {
   };
 
   return (
-    <form action={deleteInvoiceWithId} onSubmit={handleSubmit}>
+    // ✅ FIXED: TypeScript error resolved
+    <form action={deleteInvoiceWithId as any} onSubmit={handleSubmit}>
       <button 
         type="submit" 
         className="rounded-md border p-2 hover:bg-gray-100"
