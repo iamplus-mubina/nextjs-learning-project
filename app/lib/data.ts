@@ -1,3 +1,4 @@
+// /app/lib/data.ts
 import {
   CustomerField,
   CustomersTableType,
@@ -8,21 +9,16 @@ import {
 } from './definitions';
 import { formatCurrency } from './utils';
 
-//  TEMPORARY MOCK DATA FOR CHAPTER 7 & 8
-// We'll use mock data so you can continue with the tutorial
-
-// Mock sql object (temporary)
-const sql = {
-  // Empty object - we're not using real database for now
-} as any;
+// Mock database connection
+const sql = {} as any;
 
 export async function fetchRevenue() {
   try {
-    //  CHAPTER 8: ADD 3-SECOND DELAY FOR SLOW FETCH SIMULATION
     console.log('Fetching revenue data...');
+    
+    // Simulate delay
     await new Promise((resolve) => setTimeout(resolve, 3000));
     
-    //  KEEP MOCK DATA
     console.log('Data fetch completed after 3 seconds.');
     
     const mockRevenue = [
@@ -44,7 +40,8 @@ export async function fetchRevenue() {
     
   } catch (error) {
     console.error('Database Error:', error);
-    // Return mock data even on error
+    
+    // Fallback data
     return [
       { month: 'Jan', revenue: 1000 },
       { month: 'Feb', revenue: 2000 },
@@ -55,8 +52,7 @@ export async function fetchRevenue() {
 
 export async function fetchLatestInvoices() {
   try {
-    //  MOCK DATA for Chapter 7
-    console.log('📄 Using mock invoices data');
+    console.log('Using mock invoices data');
     
     const mockInvoices = [
       {
@@ -123,8 +119,7 @@ export async function fetchLatestInvoices() {
 
 export async function fetchCardData() {
   try {
-    //  MOCK DATA for Chapter 7
-    console.log('🃏 Using mock card data');
+    console.log('Using mock card data');
     
     return {
       numberOfCustomers: 8,
@@ -144,23 +139,22 @@ export async function fetchCardData() {
   }
 }
 
-// Rest of the functions (keep them as they are for future chapters)
 const ITEMS_PER_PAGE = 6;
+
 export async function fetchFilteredInvoices(
   query: string,
   currentPage: number,
 ) {
   try {
-    console.log('📊 Using mock invoices data for table');
+    console.log('Using mock invoices data for table');
     
-    // Mock data for invoices table
     const mockInvoices = [
       {
         id: '1',
         name: 'Disha de Oliveira',
         email: 'disha@oliveira.com',
         image_url: '/customers/delba-de-oliveira.png',
-        amount: 9947, // Amount in cents
+        amount: 9947,
         date: '2024-01-15',
         status: 'paid' as 'pending' | 'paid'
       },
@@ -202,7 +196,6 @@ export async function fetchFilteredInvoices(
       }
     ];
     
-    // Filter based on query (simple implementation)
     const filtered = mockInvoices.filter(invoice =>
       invoice.name.toLowerCase().includes(query.toLowerCase()) ||
       invoice.email.toLowerCase().includes(query.toLowerCase())
@@ -217,28 +210,113 @@ export async function fetchFilteredInvoices(
 }
 
 export async function fetchInvoicesPages(query: string) {
-  return 1;
+  try {
+    return 1;
+  } catch (error) {
+    console.error('Database Error:', error);
+    return 1;
+  }
 }
 
+// ✅ UPDATED FOR CHAPTER 12 - Clean and simple
 export async function fetchInvoiceById(id: string) {
-  // Mock data
-  return {
-    id: id,
-    customer_id: '1',
-    amount: 10000,
-    status: 'paid' as 'pending' | 'paid',
-  };
+  try {
+    console.log('Fetching invoice for id:', id);
+    
+    const mockInvoices = [
+      { 
+        id: '1', 
+        customer_id: '1', 
+        amount: 9947, // Amount in cents ($99.47)
+        status: 'paid' as 'pending' | 'paid',
+        date: '2024-01-15'
+      },
+      { 
+        id: '2', 
+        customer_id: '2', 
+        amount: 44800, // $448.00 in cents
+        status: 'pending' as 'pending' | 'paid',
+        date: '2024-01-20'
+      },
+      { 
+        id: '3', 
+        customer_id: '3', 
+        amount: 0, 
+        status: 'paid' as 'pending' | 'paid',
+        date: '2024-01-25'
+      },
+      { 
+        id: '4', 
+        customer_id: '4', 
+        amount: 94777, // $947.77 in cents
+        status: 'pending' as 'pending' | 'paid',
+        date: '2024-01-30'
+      },
+      { 
+        id: '5', 
+        customer_id: '5', 
+        amount: 74546, // $745.46 in cents
+        status: 'paid' as 'pending' | 'paid',
+        date: '2024-02-01'
+      },
+    ];
+    
+    // Find the invoice
+    const invoice = mockInvoices.find(inv => inv.id === id);
+    
+    if (!invoice) {
+      console.log('Invoice not found for id:', id);
+      return null; // This will trigger notFound() in page.tsx
+    }
+
+    console.log('Found invoice:', {
+      id: invoice.id,
+      customer_id: invoice.customer_id,
+      amount: invoice.amount / 100, // Convert to dollars
+      status: invoice.status
+    });
+    
+    // Return with amount converted to dollars
+    return {
+      id: invoice.id,
+      customer_id: invoice.customer_id,
+      amount: invoice.amount / 100, // Convert cents to dollars
+      status: invoice.status,
+      date: invoice.date,
+    };
+    
+  } catch (error) {
+    console.error('Database Error:', error);
+    return null;
+  }
 }
 
 export async function fetchCustomers() {
-  // Mock data
-  return [
-    { id: '1', name: 'John Doe' },
-    { id: '2', name: 'Jane Smith' },
-  ];
+  try {
+    console.log('Fetching customers...');
+    
+    const mockCustomers = [
+      { id: '1', name: 'Disha de Oliveira' },
+      { id: '2', name: 'Jared Palmer' },
+      { id: '3', name: 'Lee Robinson' },
+      { id: '4', name: 'Tom Occhino' },
+      { id: '5', name: 'Emil Kowalski' },
+    ];
+    
+    return mockCustomers;
+    
+  } catch (error) {
+    console.error('Database Error:', error);
+    return [];
+  }
 }
 
 export async function fetchFilteredCustomers(query: string) {
-  // Mock data
-  return [];
+  try {
+    console.log('Fetching filtered customers for query:', query);
+    return [];
+  } catch (error) {
+    console.error('Database Error:', error);
+    return [];
+  }
 }
